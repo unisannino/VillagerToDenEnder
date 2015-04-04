@@ -1,0 +1,16 @@
+[
+{
+  "modid": "v2d",
+  "name": "Villager To DenEnderman",
+  "description": "This mod replaces villager with DenEnderman.",
+  "version": "1.0.4.1",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["unisannino"],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]

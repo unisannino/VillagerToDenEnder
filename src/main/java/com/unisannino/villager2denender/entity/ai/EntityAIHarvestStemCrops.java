@@ -1,25 +1,15 @@
 package com.unisannino.villager2denender.entity.ai;
 
-import java.lang.reflect.Field;
 import java.util.Iterator;
 
-import com.unisannino.villager2denender.entity.EntityDenender;
-
-import scala.reflect.internal.Trees.This;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockCrops;
-import net.minecraft.block.BlockStem;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.ai.EntityAIHarvestFarmland;
 import net.minecraft.entity.ai.EntityAIMoveToBlock;
-import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.inventory.InventoryBasic;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
+
+import com.unisannino.villager2denender.entity.EntityDenender;
 
 public class EntityAIHarvestStemCrops extends EntityAIMoveToBlock
 {
@@ -27,7 +17,7 @@ public class EntityAIHarvestStemCrops extends EntityAIMoveToBlock
 	private boolean canHervest, hasSeeds;
 	//回収時true、待機時false
 	private boolean stateDenender;
-	private BlockPos cropPos;
+	protected BlockPos cropPos;
 
 	//EntityAIHarvestFarmlandとほぼ同一処理
 	public EntityAIHarvestStemCrops(EntityDenender denender, double p_i45889_2_)
@@ -72,9 +62,9 @@ public class EntityAIHarvestStemCrops extends EntityAIMoveToBlock
             BlockPos blockpos = this.destinationBlock;
             Block block = world.getBlockState(this.cropPos).getBlock();
 
-            if(world.getBlockState(blockpos.down()).getBlock() == Blocks.dirt && (block == Blocks.melon_block || block == Blocks.pumpkin))
+            if(world.getBlockState(blockpos.down()).getBlock() == Blocks.dirt && this.isTarget(block))
             {
-            	world.destroyBlock(this.cropPos, true);
+            	this.breakBlocks(world, cropPos);
             }
 
             this.stateDenender = false;
@@ -100,7 +90,7 @@ public class EntityAIHarvestStemCrops extends EntityAIMoveToBlock
                 EnumFacing enumfacing = (EnumFacing)iterator.next();
                 Block target = worldIn.getBlockState(pos.offset(enumfacing)).getBlock();
 
-                if((target == Blocks.pumpkin || target == Blocks.melon_block) && this.canHervest)
+                if(this.isTarget(target) && this.canHervest)
                 {
                 	this.cropPos = pos.offset(enumfacing);
                    	this.stateDenender = true;
@@ -110,5 +100,16 @@ public class EntityAIHarvestStemCrops extends EntityAIMoveToBlock
         }
         return false;
     }
+
+
+	protected boolean isTarget(Block target)
+	{
+		return target == Blocks.pumpkin || target == Blocks.melon_block;
+	}
+
+	protected void breakBlocks(World world, BlockPos basePos)
+	{
+    	world.destroyBlock(basePos, true);
+	}
 
 }

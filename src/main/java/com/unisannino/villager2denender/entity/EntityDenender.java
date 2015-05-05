@@ -5,63 +5,34 @@ package com.unisannino.villager2denender.entity;
 import java.lang.reflect.Field;
 import java.util.List;
 
-import com.google.common.base.Predicate;
-import com.google.common.collect.Lists;
-import com.unisannino.villager2denender.entity.ai.EntityAIHarvestStemCrops;
-import com.unisannino.villager2denender.entity.ai.EntityAIMoveAndThrowChest;
-
-import scala.reflect.internal.Trees.This;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockPumpkin;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityAgeable;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.IEntityLivingData;
-import net.minecraft.entity.ai.EntityAIAvoidEntity;
-import net.minecraft.entity.ai.EntityAIFollowGolem;
 import net.minecraft.entity.ai.EntityAIHarvestFarmland;
-import net.minecraft.entity.ai.EntityAILookAtTradePlayer;
-import net.minecraft.entity.ai.EntityAIMoveIndoors;
-import net.minecraft.entity.ai.EntityAIMoveTowardsRestriction;
-import net.minecraft.entity.ai.EntityAIOpenDoor;
-import net.minecraft.entity.ai.EntityAIPlay;
-import net.minecraft.entity.ai.EntityAIRestrictOpenDoor;
-import net.minecraft.entity.ai.EntityAISwimming;
-import net.minecraft.entity.ai.EntityAITradePlayer;
-import net.minecraft.entity.ai.EntityAIVillagerInteract;
-import net.minecraft.entity.ai.EntityAIVillagerMate;
-import net.minecraft.entity.ai.EntityAIWander;
-import net.minecraft.entity.ai.EntityAIWatchClosest;
-import net.minecraft.entity.ai.EntityAIWatchClosest2;
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.monster.EntityEnderman;
-import net.minecraft.entity.monster.EntityWitch;
-import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
-import net.minecraft.inventory.InventoryBasic;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.pathfinding.PathNavigateGround;
-import net.minecraft.stats.StatList;
 import net.minecraft.util.BlockPos;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.village.MerchantRecipe;
-import net.minecraft.village.MerchantRecipeList;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.registry.VillagerRegistry;
+
+import com.google.common.collect.Lists;
+import com.unisannino.villager2denender.entity.ai.EntityAIHarvestLogs;
+import com.unisannino.villager2denender.entity.ai.EntityAIHarvestStemCrops;
+import com.unisannino.villager2denender.entity.ai.EntityAIMoveAndThrowChest;
 
 public class EntityDenender extends EntityVillager
 {
 	private boolean checkedProfession = false;
-	private List<Item> pickItemList = Lists.newArrayList(Items.bread, Items.potato, Items.carrot, Items.wheat, Items.wheat_seeds, Items.melon, Item.getItemFromBlock(Blocks.pumpkin));
+	private List<Item> pickItemList = Lists.newArrayList(Items.bread, Items.potato, Items.carrot, Items.wheat, Items.wheat_seeds, Items.melon, Item.getItemFromBlock(Blocks.pumpkin), Item.getItemFromBlock(Blocks.log), Item.getItemFromBlock(Blocks.log2));
 
 	public EntityDenender(World worldIn)
 	{
@@ -85,6 +56,7 @@ public class EntityDenender extends EntityVillager
 			{
 				this.tasks.addTask(6, new EntityAIHarvestFarmland(this, 0.6D));
 				this.tasks.addTask(6, new EntityAIHarvestStemCrops(this, 0.6D));
+				this.tasks.addTask(6, new EntityAIHarvestLogs(this, 0.6D));
 				this.tasks.addTask(6, new EntityAIMoveAndThrowChest(this, 0.6D));
 			}
 		}
@@ -115,6 +87,16 @@ public class EntityDenender extends EntityVillager
                 }
 
                 if(itemstack.getItem() == Item.getItemFromBlock(Blocks.pumpkin) && itemstack.stackSize >= 12 * i)
+                {
+                	return true;
+                }
+
+                if(itemstack.getItem() == Item.getItemFromBlock(Blocks.log) && itemstack.stackSize >= 12 * i)
+                {
+                	return true;
+                }
+
+                if(itemstack.getItem() == Item.getItemFromBlock(Blocks.log2) && itemstack.stackSize >= 12 * i)
                 {
                 	return true;
                 }
@@ -202,6 +184,7 @@ public class EntityDenender extends EntityVillager
         {
         	this.tasks.addTask(8, new EntityAIHarvestFarmland(this, 0.6D));
             this.tasks.addTask(8, new EntityAIHarvestStemCrops(this, 0.6D));
+			this.tasks.addTask(6, new EntityAIHarvestLogs(this, 0.6D));
 			this.tasks.addTask(6, new EntityAIMoveAndThrowChest(this, 0.6D));
         }
 

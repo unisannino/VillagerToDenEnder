@@ -5,6 +5,8 @@ package com.unisannino.villager2denender.entity;
 import java.lang.reflect.Field;
 import java.util.List;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockFarmland;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.ai.EntityAIHarvestFarmland;
@@ -191,6 +193,33 @@ public class EntityDenender extends EntityVillager
         super.func_175500_n();
     }
 
+	//落っこちたときの処理
+	@Override
+    protected void func_180433_a(double p_180433_1_, boolean p_180433_3_, Block p_180433_4_, BlockPos p_180433_5_)
+    {
+        if (p_180433_3_)
+        {
+            if (this.fallDistance > 0.0F)
+            {
+            	//農地は荒らさない
+                if (p_180433_4_ != null && !(p_180433_4_ instanceof BlockFarmland))
+                {
+                    p_180433_4_.onFallenUpon(this.worldObj, p_180433_5_, this, this.fallDistance);
+                }
+                else
+                {
+                    this.fall(this.fallDistance, 1.0F);
+                }
+
+                this.fallDistance = 0.0F;
+            }
+        }
+        else if (p_180433_1_ < 0.0D)
+        {
+            this.fallDistance = (float)((double)this.fallDistance - p_180433_1_);
+        }
+    }
+
 	//Worldに誕生したときに呼ばれる？
 	@Override
 	public IEntityLivingData func_180482_a(DifficultyInstance p_180482_1_, IEntityLivingData p_180482_2_)
@@ -333,5 +362,7 @@ public class EntityDenender extends EntityVillager
             }
         }
     }
+
+
 
 }

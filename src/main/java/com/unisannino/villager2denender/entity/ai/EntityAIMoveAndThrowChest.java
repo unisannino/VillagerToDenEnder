@@ -2,21 +2,17 @@ package com.unisannino.villager2denender.entity.ai;
 
 import java.util.Iterator;
 
-import com.unisannino.villager2denender.entity.EntityDenender;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockChest;
-import net.minecraft.block.BlockCrops;
-import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.ai.EntityAIMoveToBlock;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.inventory.InventoryBasic;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
+
+import com.unisannino.villager2denender.entity.EntityDenender;
 
 public class EntityAIMoveAndThrowChest extends EntityAIMoveToBlock
 {
@@ -63,7 +59,8 @@ public class EntityAIMoveAndThrowChest extends EntityAIMoveToBlock
         super.updateTask();
         this.theDenender.getLookHelper().setLookPosition((double)this.destinationBlock.getX() + 0.5D, (double)(this.destinationBlock.getY() + 1), (double)this.destinationBlock.getZ() + 0.5D, 10.0F, (float)this.theDenender.getVerticalFaceSpeed());
 
-        if (this.func_179487_f() && this.stateDenender)
+        //if (this.func_179487_f() && this.stateDenender)
+        if(this.theDenender.getDistanceSqToCenter(this.chestPos) <= 8.0D && this.stateDenender)
         {
             World world = this.theDenender.worldObj;
             Block block = world.getBlockState(this.chestPos).getBlock();

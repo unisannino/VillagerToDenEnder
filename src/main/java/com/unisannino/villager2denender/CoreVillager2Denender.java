@@ -1,12 +1,6 @@
 package com.unisannino.villager2denender;
 
-import com.unisannino.villager2denender.entity.EntityDenender;
-import com.unisannino.villager2denender.event.EventVillagerJoinWorld;
-import com.unisannino.villager2denender.render.RenderDenender;
-
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.entity.EntityList;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -14,10 +8,13 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
-import net.minecraftforge.fml.common.registry.VillagerRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 
-@Mod(modid = "v2d", version = "1.0.4.1")
+import com.unisannino.villager2denender.entity.EntityDenender;
+import com.unisannino.villager2denender.event.EventVillagerJoinWorld;
+import com.unisannino.villager2denender.render.RenderDenender;
+
+@Mod(modid = "v2d", version = "1.1.0")
 public class CoreVillager2Denender
 {
 	@EventHandler

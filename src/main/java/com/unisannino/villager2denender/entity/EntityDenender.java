@@ -54,10 +54,15 @@ public class EntityDenender extends EntityVillager
 		{
 			this.checkedProfession = true;
 
-			if(!this.isChild() && this.getProfession() != 0)
+			if(!this.isChild())
 			{
-				this.tasks.addTask(6, new EntityAIHarvestFarmland(this, 0.6D));
-				this.tasks.addTask(6, new EntityAIHarvestStemCrops(this, 0.6D));
+	        	if(this.getProfession() != 0)
+	        	{
+
+	            	this.tasks.addTask(8, new EntityAIHarvestFarmland(this, 0.6D));
+	        	}
+
+	            this.tasks.addTask(8, new EntityAIHarvestStemCrops(this, 0.6D));
 				this.tasks.addTask(6, new EntityAIHarvestLogs(this, 0.6D));
 				this.tasks.addTask(6, new EntityAIMoveAndThrowChest(this, 0.6D));
 			}
@@ -182,9 +187,14 @@ public class EntityDenender extends EntityVillager
 	@Override
     protected void func_175500_n()
     {
-        if (!isChild() && this.getProfession() != 0)
+        if (!isChild())
         {
-        	this.tasks.addTask(8, new EntityAIHarvestFarmland(this, 0.6D));
+        	if(this.getProfession() != 0)
+        	{
+
+            	this.tasks.addTask(8, new EntityAIHarvestFarmland(this, 0.6D));
+        	}
+
             this.tasks.addTask(8, new EntityAIHarvestStemCrops(this, 0.6D));
 			this.tasks.addTask(6, new EntityAIHarvestLogs(this, 0.6D));
 			this.tasks.addTask(6, new EntityAIMoveAndThrowChest(this, 0.6D));

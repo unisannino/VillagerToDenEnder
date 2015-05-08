@@ -38,7 +38,7 @@ public class EntityAIHarvestLogs extends EntityAIMoveAndDoBlock
 				{
 					pos = new BlockPos(basePos.getX() + x, basePos.getY()+ y, basePos.getZ() + z);
 
-					if(this.isTarget(pos, world))
+					if(world.getBlockState(pos).getBlock() instanceof BlockLog)
 					{
 						super.breakBlocks(world, pos);
 						this.breakBlocks(world, pos);

@@ -53,7 +53,7 @@ public class EntityAIMoveAndThrowChest extends EntityAIMoveAndWorkBlock
 	}
 
 	@Override
-	protected boolean getWorkCondition()
+	protected boolean checkWorkCondition()
 	{
 		return this.theDenender.canFoodThrowChest();
 	}

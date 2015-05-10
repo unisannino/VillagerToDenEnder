@@ -41,7 +41,7 @@ public abstract class EntityAIMoveAndWorkBlock extends EntityAIMoveToBlock
 
             this.stateDenender = false;
             this.hasSeeds = this.theDenender.func_175556_cs();
-            this.canWork = this.getWorkCondition();
+            this.canWork = this.checkWorkCondition();
         }
 
         return super.shouldExecute();
@@ -110,7 +110,7 @@ public abstract class EntityAIMoveAndWorkBlock extends EntityAIMoveToBlock
         world.setBlockState(basePos, Blocks.air.getDefaultState(), 3);
 	}
 
-	protected boolean getWorkCondition()
+	protected boolean checkWorkCondition()
 	{
 		return this.theDenender.func_175557_cr();
 	}

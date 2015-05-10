@@ -8,7 +8,7 @@ import net.minecraft.world.World;
 
 import com.unisannino.villager2denender.entity.EntityDenender;
 
-public class EntityAIHarvestStemCrops extends EntityAIMoveAndDoBlock
+public class EntityAIHarvestStemCrops extends EntityAIMoveAndWorkBlock
 {
 	public EntityAIHarvestStemCrops(EntityDenender denender, double p_i45889_2_)
 	{
@@ -19,11 +19,12 @@ public class EntityAIHarvestStemCrops extends EntityAIMoveAndDoBlock
 	protected boolean isTarget(BlockPos targetPos, World world)
 	{
 		Block target = world.getBlockState(targetPos).getBlock();
-		return target == Blocks.pumpkin || target == Blocks.melon_block;
+		Block base = world.getBlockState(targetPos.down()).getBlock();
+		return target == Blocks.pumpkin || target == Blocks.melon_block && base == Blocks.dirt;
 	}
 
 	@Override
-	protected boolean isHarvestPos(BlockPos targetPos, World world)
+	protected boolean isWorkPos(BlockPos targetPos, World world)
 	{
 		return world.getBlockState(targetPos).getBlock() instanceof BlockStem && !world.getBlockState(targetPos.up()).getBlock().isOpaqueCube();
 	}

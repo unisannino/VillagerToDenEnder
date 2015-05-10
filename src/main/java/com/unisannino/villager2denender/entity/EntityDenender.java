@@ -34,7 +34,7 @@ import com.unisannino.villager2denender.entity.ai.EntityAIMoveAndThrowChest;
 public class EntityDenender extends EntityVillager
 {
 	private boolean checkedProfession = false;
-	private List<Item> pickItemList = Lists.newArrayList(Items.bread, Items.potato, Items.carrot, Items.wheat, Items.wheat_seeds, Items.melon, Item.getItemFromBlock(Blocks.pumpkin), Item.getItemFromBlock(Blocks.log), Item.getItemFromBlock(Blocks.log2));
+	private List<Item> pickItemList = Lists.newArrayList(Items.bread, Items.potato, Items.carrot, Items.wheat, Items.wheat_seeds, Items.melon, Item.getItemFromBlock(Blocks.pumpkin), Item.getItemFromBlock(Blocks.log), Item.getItemFromBlock(Blocks.log2), Item.getItemFromBlock(Blocks.sapling));
 
 	public EntityDenender(World worldIn)
 	{

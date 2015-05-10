@@ -1,12 +1,17 @@
 package com.unisannino.villager2denender.entity.ai;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockLeaves;
 import net.minecraft.block.BlockLog;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
+import net.minecraft.inventory.InventoryBasic;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import com.unisannino.villager2denender.entity.EntityDenender;
 
-public class EntityAIHarvestLogs extends EntityAIMoveAndDoBlock
+public class EntityAIHarvestLogs extends EntityAIMoveAndWorkBlock
 {
 	public EntityAIHarvestLogs(EntityDenender denender, double p_i45889_2_)
 	{
@@ -16,19 +21,23 @@ public class EntityAIHarvestLogs extends EntityAIMoveAndDoBlock
 	@Override
 	protected boolean isTarget(BlockPos targetPos, World world)
 	{
-		return world.getBlockState(targetPos).getBlock() instanceof BlockLog && world.getBlockState(targetPos.up()).getBlock() instanceof BlockLog;
+		Block target = world.getBlockState(targetPos).getBlock();
+		Block utarget = world.getBlockState(targetPos.up()).getBlock();
+		Block dtarget = world.getBlockState(targetPos.down()).getBlock();
+		return target instanceof BlockLog && utarget instanceof BlockLog && dtarget == Blocks.dirt;
 	}
 
 	@Override
-	protected boolean isHarvestPos(BlockPos targetPos, World world)
+	protected boolean isWorkPos(BlockPos targetPos, World world)
 	{
-		return !world.getBlockState(targetPos).getBlock().isOpaqueCube() && !world.getBlockState(targetPos.up()).getBlock().isOpaqueCube();
+		return !world.getBlockState(targetPos).getBlock().isOpaqueCube() && !world.getBlockState(targetPos.up()).getBlock().isOpaqueCube() && !(world.getBlockState(targetPos.up()).getBlock() instanceof BlockLeaves);
 	}
 
 	@Override
-	protected void breakBlocks(World world, BlockPos basePos)
+	protected void workByBlock(World world, BlockPos basePos)
 	{
 		BlockPos pos;
+		IBlockState state;;
 
 		for (int y = -1; y <= 1; y++)
 		{
@@ -40,12 +49,22 @@ public class EntityAIHarvestLogs extends EntityAIMoveAndDoBlock
 
 					if(world.getBlockState(pos).getBlock() instanceof BlockLog)
 					{
-						super.breakBlocks(world, pos);
-						this.breakBlocks(world, pos);
+						state = world.getBlockState(pos);
+						this.plantSaplings(pos, state);
+						super.workByBlock(world, pos);
+						this.workByBlock(world, pos);
 					}
 				}
 			}
 		}
+	}
+
+	private void plantSaplings(BlockPos targetPos, IBlockState state)
+	{
+		BlockLog logs = (BlockLog) state.getBlock();
+		int type = logs.damageDropped(state);
+
+		InventoryBasic inventory = this.theDenender.func_175551_co();
 	}
 
 }

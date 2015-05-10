@@ -12,21 +12,21 @@ import net.minecraft.world.World;
 
 import com.unisannino.villager2denender.entity.EntityDenender;
 
-public abstract class EntityAIMoveAndDoBlock extends EntityAIMoveToBlock
+public abstract class EntityAIMoveAndWorkBlock extends EntityAIMoveToBlock
 {
 	protected EntityDenender theDenender;
-	protected boolean canHervest, hasSeeds;
+	protected boolean canWork, hasSeeds;
 	//回収時true、待機時false
 	protected boolean stateDenender;
-	protected BlockPos targetPos, harvestPos;
+	protected BlockPos targetPos, workPos;
 
 	//EntityAIHarvestFarmlandとほぼ同一処理
-	public EntityAIMoveAndDoBlock(EntityDenender denender, double p_i45888_2_, int p_i45888_4_)
+	public EntityAIMoveAndWorkBlock(EntityDenender denender, double p_i45888_2_, int p_i45888_4_)
 	{
 		super(denender, p_i45888_2_, p_i45888_4_);
 		this.theDenender = denender;
         this.targetPos = BlockPos.ORIGIN;
-        this.harvestPos = BlockPos.ORIGIN;
+        this.workPos = BlockPos.ORIGIN;
 	}
 
 	@Override
@@ -41,7 +41,7 @@ public abstract class EntityAIMoveAndDoBlock extends EntityAIMoveToBlock
 
             this.stateDenender = false;
             this.hasSeeds = this.theDenender.func_175556_cs();
-            this.canHervest = this.theDenender.func_175557_cr();
+            this.canWork = this.getWorkCondition();
         }
 
         return super.shouldExecute();
@@ -59,13 +59,13 @@ public abstract class EntityAIMoveAndDoBlock extends EntityAIMoveToBlock
         super.updateTask();
         this.theDenender.getLookHelper().setLookPosition((double)this.destinationBlock.getX() + 0.5D, (double)(this.destinationBlock.getY() + 1), (double)this.destinationBlock.getZ() + 0.5D, 10.0F, (float)this.theDenender.getVerticalFaceSpeed());
         //距離判定をガバガバに
-        if (this.theDenender.getDistanceSqToCenter(this.harvestPos) <= 4.0D && this.stateDenender)
+        if (this.theDenender.getDistanceSqToCenter(this.workPos) <= 8.0D && this.stateDenender)
         {
             World world = this.theDenender.worldObj;
 
             if(this.isTarget(this.targetPos, world))
             {
-            	this.breakBlocks(world, targetPos);
+            	this.workByBlock(world, this.targetPos);
             }
 
             this.stateDenender = false;
@@ -78,20 +78,19 @@ public abstract class EntityAIMoveAndDoBlock extends EntityAIMoveToBlock
     {
 		//y-1対策
 		BlockPos pos = p_179488_2_.up();
-        Block block = worldIn.getBlockState(p_179488_2_).getBlock();
 
-        if(block == Blocks.dirt && this.isTarget(pos, worldIn) && this.canHervest)
+        if(this.isTarget(pos, worldIn) && this.canWork)
         {
         	Iterator iterator = EnumFacing.Plane.HORIZONTAL.iterator();
         	while (iterator.hasNext())
         	{
         		EnumFacing enumfacing = (EnumFacing)iterator.next();
-        		if(this.isHarvestPos(pos.offset(enumfacing), worldIn))
+        		if(this.isWorkPos(pos.offset(enumfacing), worldIn))
         		{
         			this.targetPos = pos;
         			//なんかわからないけどズレが生じる
         			//チャンクからの情報取得の際に何かが起こる？
-        			this.harvestPos = pos.offset(enumfacing);
+        			this.workPos = pos.offset(enumfacing);
         			this.stateDenender = true;
         			return true;
         		}
@@ -100,7 +99,7 @@ public abstract class EntityAIMoveAndDoBlock extends EntityAIMoveToBlock
         return false;
     }
 
-	protected void breakBlocks(World world, BlockPos basePos)
+	protected void workByBlock(World world, BlockPos basePos)
 	{
 		//判定をガバガバにしたから元の位置ではなく田園ダーマンのいた場所にドロップさせる
         IBlockState iblockstate = world.getBlockState(basePos);
@@ -111,7 +110,12 @@ public abstract class EntityAIMoveAndDoBlock extends EntityAIMoveToBlock
         world.setBlockState(basePos, Blocks.air.getDefaultState(), 3);
 	}
 
+	protected boolean getWorkCondition()
+	{
+		return this.theDenender.func_175557_cr();
+	}
+
 	protected abstract boolean isTarget(BlockPos targetPos, World world);
-	protected abstract boolean isHarvestPos(BlockPos targetPos, World world);
+	protected abstract boolean isWorkPos(BlockPos targetPos, World world);
 
 }

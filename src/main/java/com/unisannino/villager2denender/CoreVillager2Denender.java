@@ -14,7 +14,7 @@ import com.unisannino.villager2denender.entity.EntityDenender;
 import com.unisannino.villager2denender.event.EventVillagerJoinWorld;
 import com.unisannino.villager2denender.render.RenderDenender;
 
-@Mod(modid = "v2d", version = "1.1.0")
+@Mod(modid = "v2d", version = "1.1.1")
 public class CoreVillager2Denender
 {
 	@EventHandler

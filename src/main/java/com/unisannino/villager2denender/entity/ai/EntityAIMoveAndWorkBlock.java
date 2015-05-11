@@ -101,12 +101,19 @@ public abstract class EntityAIMoveAndWorkBlock extends EntityAIMoveToBlock
 
 	protected void workByBlock(World world, BlockPos basePos)
 	{
-		//判定をガバガバにしたから元の位置ではなく田園ダーマンのいた場所にドロップさせる
+		//判定をガバガバにしたから元の位置ではなく田園ダーマンの通りそうな場所にドロップさせる
         IBlockState iblockstate = world.getBlockState(basePos);
         Block block = iblockstate.getBlock();
+        BlockPos denPos = this.theDenender.getPosition();
+
+        //現在位置と移動予定位置から進行方向の向きの推定
+        int vx = this.destinationBlock.getX() - denPos.getX() > 0 ? 1 : this.destinationBlock.getX() - denPos.getX() < 0 ? -1 : 0;
+        int vz = this.destinationBlock.getZ() - denPos.getZ() > 0 ? 1 : this.destinationBlock.getZ() - denPos.getZ() < 0 ? -1 : 0;
+
+        BlockPos dropPos = denPos.add(vx, 0, vz);
 
         world.playAuxSFX(2001, basePos, Block.getStateId(iblockstate));
-        block.dropBlockAsItem(world, this.theDenender.getPosition(), iblockstate, 0);
+        block.dropBlockAsItem(world, dropPos, iblockstate, 0);
         world.setBlockState(basePos, Blocks.air.getDefaultState(), 3);
 	}
 
